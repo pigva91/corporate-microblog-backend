@@ -124,3 +124,4 @@ dmypy.json
 .swp
 
 prettifier.py
+.DS_Store
