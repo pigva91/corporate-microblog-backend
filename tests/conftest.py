@@ -32,7 +32,7 @@ def mock_settings():
         "postgres_host": "localhost",
         "postgres_port": "5432",
         "postgres_db": "test_db",
-        "media_folder": "/media"
+        "media_folder": "/media",
     }
 
     with patch("app.config.settings", **test_settings):
