@@ -1,6 +1,7 @@
 import os
 import tempfile
 from typing import Any, AsyncGenerator
+from unittest.mock import patch
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -104,3 +105,17 @@ async def another_user_id(prepare_database) -> AsyncGenerator[int, None]:
         await db.commit()
         await db.refresh(user)
         yield user.id
+
+
+@pytest_asyncio.fixture
+def mock_settings():
+    test_settings = {
+        "postgres_user": "test_user",
+        "postgres_password": "test_password",
+        "postgres_host": "localhost",
+        "postgres_port": "5432",
+        "postgres_db": "test_db",
+    }
+
+    with patch("app.config.settings", **test_settings):
+        yield
