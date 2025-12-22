@@ -11,7 +11,6 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from app.config import settings
 from app.database import Base
 from app.deps import get_db
 from app.main import app
@@ -23,6 +22,21 @@ test_engine = create_async_engine(TEST_DATABASE_URL, echo=False)
 TestAsyncSession = async_sessionmaker(
     test_engine, class_=AsyncSession, expire_on_commit=False
 )
+
+
+@pytest_asyncio.fixture(autouse=True)
+def mock_settings():
+    test_settings = {
+        "postgres_user": "test_user",
+        "postgres_password": "test_password",
+        "postgres_host": "localhost",
+        "postgres_port": "5432",
+        "postgres_db": "test_db",
+        "media_folder": "/media"
+    }
+
+    with patch("app.config.settings", **test_settings):
+        yield
 
 
 @pytest_asyncio.fixture
@@ -52,7 +66,7 @@ async def prepare_database() -> AsyncGenerator[None, None]:
 @pytest_asyncio.fixture
 def temp_media_folder():
     with tempfile.TemporaryDirectory() as tmpdir:
-        settings.media_folder = tmpdir
+        os.environ["media_folder"] = tmpdir
         os.makedirs(tmpdir, exist_ok=True)
         yield
 
@@ -105,17 +119,3 @@ async def another_user_id(prepare_database) -> AsyncGenerator[int, None]:
         await db.commit()
         await db.refresh(user)
         yield user.id
-
-
-@pytest_asyncio.fixture
-def mock_settings():
-    test_settings = {
-        "postgres_user": "test_user",
-        "postgres_password": "test_password",
-        "postgres_host": "localhost",
-        "postgres_port": "5432",
-        "postgres_db": "test_db",
-    }
-
-    with patch("app.config.settings", **test_settings):
-        yield
