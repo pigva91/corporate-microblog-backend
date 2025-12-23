@@ -10,7 +10,6 @@ from app.routes import router
 media_dir = settings.media_folder
 os.makedirs(media_dir, exist_ok=True)
 
-
 app = FastAPI(
     title="Сервис микроблогов API",
     description="""

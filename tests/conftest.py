@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from app.config import settings
 from app.database import Base
 from app.deps import get_db
 from app.main import app
@@ -51,7 +50,7 @@ async def prepare_database() -> AsyncGenerator[None, None]:
 @pytest_asyncio.fixture
 def temp_media_folder():
     with tempfile.TemporaryDirectory() as tmpdir:
-        settings.media_folder = tmpdir
+        os.environ["media"] = tmpdir
         os.makedirs(tmpdir, exist_ok=True)
         yield
 
