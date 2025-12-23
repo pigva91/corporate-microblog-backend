@@ -1,15 +1,13 @@
-import os
-
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    postgres_user: str
-    postgres_password: SecretStr
-    postgres_host: str
-    postgres_port: int
-    postgres_db: str
+    postgres_user: str = "postgres"
+    postgres_password: SecretStr = SecretStr("password")
+    postgres_host: str = "db"
+    postgres_port: int = 5432
+    postgres_db: str = "postgres_db"
     sql_debug: bool = False
     media_folder: str = "media"
 
@@ -26,7 +24,4 @@ class Settings(BaseSettings):
         )
 
 
-def get_settings() -> Settings:
-    if os.getenv("TESTING") == "1":
-        raise RuntimeError("Settings не должны запрашиваться в тестах")
-    return Settings()  # type: ignore
+settings = Settings()  # type: ignore

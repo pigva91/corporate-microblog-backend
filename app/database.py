@@ -5,9 +5,8 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-from app.config import get_settings
+from app.config import settings
 
-settings = get_settings()
 engine = create_async_engine(settings.database_url, echo=settings.sql_debug)
 SessionLocal = async_sessionmaker(
     bind=engine, class_=AsyncSession, expire_on_commit=False

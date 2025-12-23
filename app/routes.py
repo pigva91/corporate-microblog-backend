@@ -4,7 +4,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
+from app.config import settings
 from app.crud import (
     create_media,
     create_tweet,
@@ -27,7 +27,6 @@ from app.schemas import (
 )
 
 router = APIRouter()
-settings = get_settings()
 
 
 @router.post("/tweets", response_model=OperationResponse)
