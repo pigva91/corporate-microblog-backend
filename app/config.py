@@ -1,3 +1,5 @@
+import os
+
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -24,4 +26,7 @@ class Settings(BaseSettings):
         )
 
 
-settings = Settings()  # type: ignore
+def get_settings() -> Settings:
+    if os.getenv("TESTING") == "1":
+        raise RuntimeError("Settings не должны запрашиваться в тестах")
+    return Settings()  # type: ignore

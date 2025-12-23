@@ -3,9 +3,10 @@ import asyncio
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
-from app.config import settings
+from app.config import get_settings
 from app.models import Tweet, User, tweet_likes, user_follows
 
+settings = get_settings()
 database_url = (
     f"postgresql+asyncpg://"
     f"{settings.postgres_user}:"

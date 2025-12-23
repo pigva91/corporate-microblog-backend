@@ -4,12 +4,12 @@ from fastapi import FastAPI, HTTPException
 from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
-from app.config import settings
+from app.config import get_settings
 from app.routes import router
 
+settings = get_settings()
 media_dir = settings.media_folder
 os.makedirs(media_dir, exist_ok=True)
-
 
 app = FastAPI(
     title="Сервис микроблогов API",
